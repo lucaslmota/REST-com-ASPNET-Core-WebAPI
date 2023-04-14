@@ -14,7 +14,11 @@ namespace DevIo.API.Controllers
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedorController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService, IMapper mapper)
+        public FornecedorController(
+            IFornecedorRepository fornecedorRepository, 
+            IFornecedorService fornecedorService, 
+            IMapper mapper, 
+            INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _fornecedorService = fornecedorService;
@@ -42,27 +46,27 @@ namespace DevIo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adcionar(FornecedorDTO fornecedorDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
+            await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorDTO));
 
-            await _fornecedorService.Adicionar(fornecedor);
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDTO);
 
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
         {
-            if(id != fornecedorDTO.Id) return BadRequest();
+            if (id != fornecedorDTO.Id)
+            {
+                NotificarErro("O id informado diverge do que foi passado");
+                return CustomResponse(fornecedorDTO);
+            }
 
-            if(!ModelState.IsValid) return BadRequest();
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
-
-            await _fornecedorService.Atualizar(fornecedor);
-            return Ok(fornecedor);
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorDTO));
+            return CustomResponse(fornecedorDTO);
         }
 
         [HttpDelete("{id:guid}")]
@@ -74,9 +78,26 @@ namespace DevIo.API.Controllers
 
             await _fornecedorService.Remover(id);
 
-            return NoContent();
+            return CustomResponse(obterFornecedor);
         }
 
+        [HttpGet("obter-endereco/{id:guid}")]
+        public async Task<EnderecoDTO> ObterEnderecoPorId(Guid id)
+        {
+            return _mapper.Map<EnderecoDTO>(await _fornecedorRepository.ObterPorId(id));
+        }
+
+        [HttpPut("atualizar-endereco/{id:guid}")]
+        public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoDTO enderecoDTO)
+        {
+            if(id != enderecoDTO.Id) return BadRequest();
+
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var endereco = _mapper.Map<Endereco>(enderecoDTO);
+            await _fornecedorService.AtualizarEndereco(endereco);
+            return CustomResponse(enderecoDTO);
+        }
 
 
     }
