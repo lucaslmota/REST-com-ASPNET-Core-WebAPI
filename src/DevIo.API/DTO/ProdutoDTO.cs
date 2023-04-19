@@ -22,7 +22,8 @@ namespace DevIo.API.DTO
         public string? Descricao { get; set; }
 
         [DisplayName("Imagem do Produto")]
-        public IFormFile? ImagemUpload { get; set; }
+        //public IFormFile? ImagemUpload { get; set; }
+        public string ImagemUpload { get; set; } = string.Empty;
 
         public string? Imagem { get; set; }
 
