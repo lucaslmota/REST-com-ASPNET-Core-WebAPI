@@ -2,11 +2,13 @@
 using DevIo.API.DTO;
 using DevIo.Business.Interfaces;
 using DevIo.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIo.API.Controllers
 {
+    [Authorize]
     [Route("api/fornecedores")]
     public class FornecedorController : MainController
     {
@@ -25,6 +27,7 @@ namespace DevIo.API.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {
