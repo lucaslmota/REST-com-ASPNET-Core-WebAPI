@@ -75,7 +75,7 @@ namespace DevIo.API.Controllers
             return CustomResponse(produtoDTO);
         }
 
-        [HttpPut("id:guid")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO produtoDTO)
         {
             if(id != produtoDTO.Id)
