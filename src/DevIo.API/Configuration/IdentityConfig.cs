@@ -15,7 +15,7 @@ namespace DevIo.API.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ConnStr")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddErrorDescriber<IdentityMensagensPortugues>.AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddErrorDescriber<IdentityMensagensPortugues>().AddDefaultTokenProviders();
             
             return services;
         }
