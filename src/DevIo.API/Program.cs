@@ -12,6 +12,8 @@ builder.Services.AddDbContext<MeuDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.AddIdentityConfiguration(builder.Configuration);
+
 builder.Services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ResolveDependencies();
@@ -38,6 +40,8 @@ app.UseCors(p => p
                   .AllowAnyHeader()
                   .AllowAnyOrigin()
                   .AllowAnyMethod());
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
