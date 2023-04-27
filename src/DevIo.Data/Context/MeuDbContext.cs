@@ -11,7 +11,7 @@ namespace DevIo.Data.Context
 {
     public class MeuDbContext : DbContext
     {
-        public MeuDbContext(DbContextOptions options) : base(options)
+        public MeuDbContext(DbContextOptions<MeuDbContext>options) : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             ChangeTracker.AutoDetectChangesEnabled = false;
