@@ -79,7 +79,7 @@ namespace DevIo.API.Controllers
 
         }
 
-        private async Task<string> GerarJwt(string email)
+        private async Task<LoginResponseDTO> GerarJwt(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
@@ -111,7 +111,19 @@ namespace DevIo.API.Controllers
             });
 
             var encodedToken = tokenHandle.WriteToken(token);
-            return encodedToken;
+
+            var response = new LoginResponseDTO
+            {
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalSeconds,
+                UserTokenDTO = new UserTokenDTO
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Claims = claims.Select(c => new ClaimDTO { Type = c.Type, Value = c.Value })
+                }
+            };
+            return response;
         }
 
         private static long ToUnixEpochDate(DateTime date)
