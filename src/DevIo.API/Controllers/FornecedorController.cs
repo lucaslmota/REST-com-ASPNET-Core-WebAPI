@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using DevIo.API.DTO;
 using DevIo.Business.Interfaces;
 using DevIo.Business.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using static DevIo.API.Extensions.CustomAuthorize;
 
 namespace DevIo.API.Controllers
 {
@@ -46,6 +46,7 @@ namespace DevIo.API.Controllers
             return Ok(fornecedor);
         }
 
+        
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adcionar(FornecedorDTO fornecedorDTO)
         {
@@ -56,7 +57,8 @@ namespace DevIo.API.Controllers
             return CustomResponse(fornecedorDTO);
 
         }
-
+        
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
         {
