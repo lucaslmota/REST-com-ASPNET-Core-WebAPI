@@ -4,7 +4,7 @@
     {
         public string Secret { get; set; } =string.Empty;
         public int ExpiracaoHoras { get; set; }
-        public string? Emissor { get; set; }
-        public string? ValidoEm { get; set; }
+        public string Emissor { get; set; }
+        public string ValidoEm { get; set; }
     }
 }

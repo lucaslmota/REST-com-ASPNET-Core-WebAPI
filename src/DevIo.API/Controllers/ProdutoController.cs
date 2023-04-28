@@ -143,7 +143,7 @@ namespace DevIo.API.Controllers
             return true;
         }
 
-        private async Task<bool> UploadArquivoGrande(IFormFile? arquivo, string imgPrefixo)
+        private async Task<bool> UploadArquivoGrande(IFormFile arquivo, string imgPrefixo)
         {
             if (arquivo == null || arquivo.Length == 0)
             {
