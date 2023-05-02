@@ -2,10 +2,12 @@
 using DevIo.API.DTO;
 using DevIo.Business.Interfaces;
 using DevIo.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIo.API.Controllers
 {
+    [Authorize]
     [Route("api/produtos")]
     public class ProdutoController : MainController
     {
