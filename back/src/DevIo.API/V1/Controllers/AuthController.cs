@@ -1,4 +1,5 @@
-﻿using DevIo.API.DTO;
+﻿using DevIo.API.Controllers;
+using DevIo.API.DTO;
 using DevIo.API.Extensions;
 using DevIo.Business.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DevIo.API.Controllers
+namespace DevIo.API.V1.Controllers
 {
     [Route("api/logar")]
     public class AuthController : MainController
@@ -18,9 +19,9 @@ namespace DevIo.API.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
         public AuthController(
-            INotificador notificador, 
-            SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userManager, 
+            INotificador notificador,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
             IOptions<AppSettings> appSettings) : base(notificador)
         {
             _signInManager = signInManager;
@@ -90,7 +91,7 @@ namespace DevIo.API.Controllers
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
-            foreach(var userRole in  userRoles)
+            foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim("role", userRole));
             }

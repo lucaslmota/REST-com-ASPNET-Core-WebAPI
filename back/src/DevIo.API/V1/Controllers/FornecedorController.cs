@@ -5,11 +5,13 @@ using DevIo.API.DTO;
 using DevIo.Business.Interfaces;
 using DevIo.Business.Models;
 using static DevIo.API.Extensions.CustomAuthorize;
+using DevIo.API.Controllers;
 
-namespace DevIo.API.Controllers
+namespace DevIo.API.V1.Controllers
 {
-    [Authorize]
-    [Route("api/fornecedores")]
+    
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/fornecedores")]
     public class FornecedorController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
@@ -17,9 +19,9 @@ namespace DevIo.API.Controllers
         private readonly IMapper _mapper;
 
         public FornecedorController(
-            IFornecedorRepository fornecedorRepository, 
-            IFornecedorService fornecedorService, 
-            IMapper mapper, 
+            IFornecedorRepository fornecedorRepository,
+            IFornecedorService fornecedorService,
+            IMapper mapper,
             INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
@@ -46,7 +48,7 @@ namespace DevIo.API.Controllers
             return Ok(fornecedor);
         }
 
-        
+
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adcionar(FornecedorDTO fornecedorDTO)
         {
@@ -57,7 +59,7 @@ namespace DevIo.API.Controllers
             return CustomResponse(fornecedorDTO);
 
         }
-        
+
         [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
@@ -68,7 +70,7 @@ namespace DevIo.API.Controllers
                 return CustomResponse(fornecedorDTO);
             }
 
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorDTO));
             return CustomResponse(fornecedorDTO);
@@ -95,9 +97,9 @@ namespace DevIo.API.Controllers
         [HttpPut("atualizar-endereco/{id:guid}")]
         public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoDTO enderecoDTO)
         {
-            if(id != enderecoDTO.Id) return BadRequest();
+            if (id != enderecoDTO.Id) return BadRequest();
 
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var endereco = _mapper.Map<Endereco>(enderecoDTO);
             await _fornecedorService.AtualizarEndereco(endereco);

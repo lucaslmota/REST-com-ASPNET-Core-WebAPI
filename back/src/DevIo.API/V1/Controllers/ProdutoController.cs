@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
+using DevIo.API.Controllers;
 using DevIo.API.DTO;
 using DevIo.Business.Interfaces;
 using DevIo.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevIo.API.Controllers
+namespace DevIo.API.V1.Controllers
 {
     [Authorize]
-    [Route("api/produtos")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/produtos")]
     public class ProdutoController : MainController
     {
         private readonly IProdutoRepository _produtoRepository;
@@ -80,7 +82,7 @@ namespace DevIo.API.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO produtoDTO)
         {
-            if(id != produtoDTO.Id)
+            if (id != produtoDTO.Id)
             {
                 NotificarErro("Os Ids divergem.");
                 return CustomResponse();
@@ -88,12 +90,12 @@ namespace DevIo.API.Controllers
 
             var produtoAtualizacao = _mapper.Map<ProdutoDTO>(await _produtoRepository.ObterProdutoFornecedor(id));
             produtoDTO.Imagem = produtoAtualizacao.Imagem;
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            if(produtoDTO.ImagemUpload != null)
+            if (produtoDTO.ImagemUpload != null)
             {
                 var imagemNome = Guid.NewGuid() + "_" + produtoDTO.Imagem;
-                if(!UploadArquivo(produtoDTO.ImagemUpload, imagemNome))
+                if (!UploadArquivo(produtoDTO.ImagemUpload, imagemNome))
                 {
                     return CustomResponse(ModelState);
                 }
