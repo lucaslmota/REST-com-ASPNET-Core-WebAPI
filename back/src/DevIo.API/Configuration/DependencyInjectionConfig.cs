@@ -3,6 +3,8 @@ using DevIo.Business.Notificacoes;
 using DevIo.Business.Services;
 using DevIo.Data.Context;
 using DevIo.Data.Repository;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DevIo.API.Configuration
 {
@@ -18,6 +20,8 @@ namespace DevIo.API.Configuration
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IFornecedorService, FornecedorService>();
             services.AddScoped<IProdutoService, ProdutoService>();
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             return services;
         }
