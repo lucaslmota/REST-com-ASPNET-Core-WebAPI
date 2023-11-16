@@ -1,0 +1,72 @@
+.conteudo-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+
+  .conteudo-form {
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 30px 60px 0 gray;
+    text-align: center;
+    width: 45%;
+    height: 350px;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .conteudo-form:hover {
+    box-shadow: 0 30px 60px 0 rgb(54, 54, 54);
+  }
+}
+
+.input-login {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 0px;
+  text-align: center;
+  font-size: 16px;
+  margin: 5px;
+  width: 45%;
+  border: 2px solid #f6f6f6;
+  transition: all 0.5s ease-in-out;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.mensagem-erro {
+  font-size: 14px;
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.input-submit {
+  background-color: #8d448b;
+  border: none;
+  color: white;
+  padding: 15px 0px;
+  margin-top: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 13px;
+  box-shadow: 0 10px 30px 0 #8f2a8b;
+  border-radius: 5px 5px 5px 5px;
+  transition: all 0.3s ease-in-out;
+  width: 25%;
+  cursor: pointer;
+}
+
+.logo {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 80px;
+  background-color: #8d448b;
+  border: none;
+  color: white;
+  font-size: 13px;
+  box-shadow: 0 10px 30px 0 #8f2a8b;
+  border-radius: 5px 5px 5px 5px;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
