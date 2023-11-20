@@ -18,15 +18,18 @@ namespace DevIo.API.V1.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
         public AuthController(
             INotificador notificador,
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IOptions<AppSettings> appSettings) : base(notificador)
+            IOptions<AppSettings> appSettings,
+            ILogger<AuthController> logger) : base(notificador)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost("nova-conta")]
@@ -51,9 +54,13 @@ namespace DevIo.API.V1.Controllers
             foreach (var error in result.Errors)
             {
                 NotificarErro(error.Description);
+                _logger.LogWarning(error.Description);
             }
 
-
+            //_logger.LogInformation("informaçõ");
+            //_logger.LogWarning("Log de aviso");
+            //_logger.LogError("Erro");
+            //_logger.LogCritical("Critico");
             return CustomResponse(registerUserDTO);
         }
 

@@ -169,5 +169,16 @@ namespace DevIo.API.V1.Controllers
             }
             return true;
         }
-    }
+
+        //{ exemplo de json para criar produto
+        //  "fornecedorId": "35945f78-91f5-4d69-e354-08db406e7441",
+        //  "nome": "teste de produto",
+        //  "descricao": "sdsdfsd",
+        //  "imagemUpload": "tem que converter uma imagem para base64",
+        //  "imagem": "nome da imagem",
+        //  "valor": 12,
+        //  "dataCadastro": "2023-11-19T23:50:32.758Z",
+        //  "ativo": true
+        //}
+}
 }

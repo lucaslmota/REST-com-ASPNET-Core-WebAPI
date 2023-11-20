@@ -1,10 +1,21 @@
 using DevIo.API.Configuration;
+using DevIo.API.Extensions;
 using DevIo.Data.Context;
+using HealthChecks.UI.Client;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHealthChecks()
+    .AddCheck("Produtos", new SqlServerHealthCheck(builder.Configuration.GetConnectionString("ConnStr")))
+    .AddSqlServer(builder.Configuration.GetConnectionString("ConnStr"), name:"sqlserver", tags: new string[] { "db", "data", "sql" });
+
+builder.Services.AddHealthChecksUI()
+    .AddSqlServerStorage(builder.Configuration.GetConnectionString("ConnStr"));
 
 builder.Services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -55,6 +66,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSwaggerConfig();
 
+builder.Services.AddLoggingConfigurationn();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,14 +76,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerConfig(app.Services.GetService<IApiVersionDescriptionProvider>());
 }
 
+app.UseLoggingConfiguration();
+
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthChecks("/api/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecksUI(options => 
+{
+    options.UIPath = "/monitor";
+});
 
 app.Run();
